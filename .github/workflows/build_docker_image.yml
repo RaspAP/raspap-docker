@@ -24,8 +24,6 @@ jobs:
           - amd64
           - arm64
           - arm/v7
-          - ppc64le
-          - s390x
           - 386
     steps:
     - name: Checkout code from Git repository
@@ -88,8 +86,6 @@ jobs:
                                ${IMAGE_ID}:${{ env.BRANCH_NAME }}-amd64 \
                                ${IMAGE_ID}:${{ env.BRANCH_NAME }}-arm64 \
                                ${IMAGE_ID}:${{ env.BRANCH_NAME }}-armv7 \
-                               ${IMAGE_ID}:${{ env.BRANCH_NAME }}-ppc64le \
-                               ${IMAGE_ID}:${{ env.BRANCH_NAME }}-s390x \
                                ${IMAGE_ID}:${{ env.BRANCH_NAME }}-386
         
         docker manifest push ${IMAGE_ID}:${{ env.BRANCH_NAME }}

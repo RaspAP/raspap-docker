@@ -1,4 +1,4 @@
-name: Build Vi-v
+name: Build docker images
 
 on:
   push:

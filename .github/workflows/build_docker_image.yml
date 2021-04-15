@@ -65,10 +65,28 @@ jobs:
           
           # Save Available platforms
           echo "available_platforms=${available_platforms}" >> $GITHUB_ENV
+      # Use cache image for quicker build time.
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      # Use official buildx GitHub Action
       - name: Docker build & push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new
+          platforms:  ${{ env.available_platforms }}
+          tags: ghcr.io/${{ github.repository }}:latest
+
+      # Save new cache
+      - name: Move cache
         run: |
-          docker buildx build \
-          --output type=image,push=true \
-          --platform ${{ env.available_platforms }} \
-          --tag ghcr.io/${{ github.repository }}:latest \
-          .
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache

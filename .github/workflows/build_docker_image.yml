@@ -44,6 +44,7 @@ jobs:
       - name: Prepare available platforms build
         env: # Here you need to test on what platform your docker image can be build. Important one is linux/arm/v7, linux/arm64 and linux/amd64
           requested_platforms: "linux/amd64,linux/arm64,linux/ppc64le,linux/s390x,linux/386,linux/arm/v7,linux/arm/v6"
+          image: "ghcr.io/${{ github.repository }}:latest"
         run: |
           # If you use the `requested_platforms` env var, then parse it.
           if [ -z "${requested_platforms}" ]; then
@@ -65,6 +66,8 @@ jobs:
           
           # Save Available platforms
           echo "available_platforms=${available_platforms}" >> $GITHUB_ENV
+          echo "docker_image=${image,,}" >> $GITHUB_ENV
+
       # Use cache image for quicker build time.
       - name: Cache Docker layers
         uses: actions/cache@v2
@@ -77,15 +80,13 @@ jobs:
       # Use official buildx GitHub Action
       - name: Docker build & push
         uses: docker/build-push-action@v2
-        env:
-          image: ghcr.io/${{ github.repository }}:latest
         with:
           context: .
           push: true
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
           platforms:  ${{ env.available_platforms }}
-          tags: ${image,,}
+          tags: ${{ env.docker_image }}
 
       # Save new cache
       - name: Move cache

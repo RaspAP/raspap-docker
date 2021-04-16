@@ -78,7 +78,7 @@ jobs:
       - name: Docker build & push
         uses: docker/build-push-action@v2
         env:
-          image: = ghcr.io/${{ github.repository }}:latest
+          image: ghcr.io/${{ github.repository }}:latest
         with:
           context: .
           push: true

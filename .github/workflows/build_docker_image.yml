@@ -43,11 +43,11 @@ jobs:
 
       - name: Prepare available platforms build
         env: # Here you need to test on what platform your docker image can be build. Important one is linux/arm/v7, linux/arm64 and linux/amd64
-          requested_platforms: "linux/amd64,linux/arm64,linux/ppc64le,linux/s390x,linux/386,linux/arm/v7,linux/arm/v6"
+          requested_platforms: "linux/amd64,linux/arm64,linux/s390x,linux/386,linux/arm/v7"
           image: "ghcr.io/${{ github.repository }}:latest"
         run: |
           # If you use the `requested_platforms` env var, then parse it.
-          if [ -z "${requested_platforms}" ]; then
+          if [ -n "${requested_platforms}" ]; then
             # Transform env var into bash array to calculate arrays intersect. That allow us to know the plateform that can work with our image who can be build on current github docker buildx.
             IFS=',' read -r -a requested_platforms <<< "${requested_platforms}"
             IFS=',' read -r -a available_platforms <<< "${{ steps.buildx.outputs.platforms }}"

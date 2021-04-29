@@ -1,0 +1,25 @@
+version: '3.7'
+
+services:
+  raspap:
+    build: .
+    image: raspap:2.6.5
+    container_name: raspap
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    networks:
+      - raspap_net
+#    volumes:
+#      - /etc/wpa_supplicant/wpa_supplicant.conf:/etc/wpa_supplicant/wpa_supplicant.conf
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+
+networks:
+  raspap_net:
+    name: raspap_net
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.25.0.24/29"

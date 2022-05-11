@@ -2,13 +2,11 @@
 FROM balenalib/raspberrypi3:buster-20220415
 WORKDIR /app
 RUN install_packages ansible git supervisor
-RUN git clone https://github.com/RaspAP/raspap-ansible
-# do this in ansible step instead long-term
-#RUN install_packages lighttpd git hostapd dnsmasq iptables-persistent vnstat qrencode php7.3-cgi openvpn wpasupplicant
-#RUN install_packages iw wireless-tools vim dhcpcd5
-#RUN mkdir -p /var/run/lighttpd && chmod 777 /var/run/lighttpd
-#COPY raspap-ansible /app/
-RUN ansible-playbook docker.yaml --connection=local
+# TODO: use production ansible repo, not my fork
+RUN ls -lrt
+RUN git clone --single-branch --branch jrcichra/docker https://github.com/jrcichra/raspap-ansible
+RUN /bin/bash -c 'cd raspap-ansible && ansible-playbook docker.yaml --connection=local -e skip_systemd=yes  -e hostapd_country_code=US'
+RUN mkdir -p /var/run/lighttpd && chmod 777 /var/run/lighttpd
 COPY supervisord.conf wpa_supplicant.conf /app/
 ENTRYPOINT ["/usr/bin/supervisord","-n","-c","/app/supervisord.conf"]
 

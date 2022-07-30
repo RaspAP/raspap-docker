@@ -5,10 +5,12 @@
 A community-led docker container for RaspAP
 
 # Usage
-```
-docker run --name raspap -it -d --privileged --network=host -v /sys/fs/cgroup:/sys/fs/cgroup:ro --cap-add SYS_ADMIN jrcichra/raspap-docker
-docker exec -it raspap bash
-$ ./setup.sh
-docker restart raspap
-Web GUI should be accessible on http://localhost by default
-```
+Copy `dhcpcd.conf` over your `/etc/dhcpcd.conf` file. We're using the `dhcpcd` binary on the host system, but disabling it from managing `wpa_supplicant`. `wpa_supplicant` is managed inside the RaspAP container.
+`docker run --name raspap -it -d --privileged jrcichra/raspap-docker`
+
+The Web GUI should be accessible on http://localhost with the default credentials.
+
+# Known issues
++ No persistence, so settings will be lost if the container is destroyed.
++ The default install configuration works, but many options may not. The container does not run systemd.
+

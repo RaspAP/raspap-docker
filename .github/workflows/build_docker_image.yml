@@ -3,6 +3,8 @@ name: Build docker images
 on:
   push:
     branches: [ 'master' ]
+  pull_request:
+    branches: [ 'master' ]
   schedule:
     # Cron execution is for weekly dependencies update (for security update)
     #             ┌───────────── minute (0 - 59)
@@ -26,14 +28,6 @@ jobs:
         id: buildx
         uses: docker/setup-buildx-action@v1
 
-      # Only if you want the image to be push to docker.io instead of the GitHub Package repository
-#       - name: Docker login to DockerHub
-#         uses: docker/login-action@v1
-#         with:
-#           username: ${{ secrets.DOCKER_USERNAME }}
-#           password: ${{ secrets.DOCKER_PASSWORD }}
-
-      # Comment this if you prefer to use the docker.io image repository | This method can be better because it didn't need any password (use the credentials of the people who commit)
       - name: Docker login to GitHub
         uses: docker/login-action@v1 
         with:

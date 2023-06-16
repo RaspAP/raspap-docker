@@ -43,7 +43,7 @@ jobs:
 
       - name: Prepare available platforms build
         env: # Here you need to test on what platform your docker image can be build. Important one is linux/arm/v7, linux/arm64 and linux/amd64
-          requested_platforms: "linux/amd64,linux/arm64,linux/386,linux/arm/v7" # alehaa/debian-systemd:buster support only i386, amd64, arm and arm64
+          requested_platforms: "linux/amd64,linux/arm64,linux/arm/v7" # jrei/systemd-debian:10 support only i386, amd64, arm and arm64
           image: "ghcr.io/${{ github.repository }}:latest"
         run: |
           # If you use the `requested_platforms` env var, then parse it.

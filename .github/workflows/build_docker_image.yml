@@ -34,16 +34,28 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Prepare available platforms build
-        env:
+        env: # Here you need to test on what platform your docker image can be build. Important one is linux/arm/v7, linux/arm64 and linux/amd64
           requested_platforms: 'linux/amd64,linux/arm64,linux/arm/v7'
         run: |
-          IFS=',' read -r -a requested_platforms <<< "${requested_platforms}"
-          IFS=',' read -r -a available_platforms <<< "${{ steps.buildx.outputs.platforms }}"
-          available_platforms=$(comm -12 <(printf '%s\n' "${requested_platforms[@]}" | LC_ALL=C sort) <(printf '%s\n' "${available_platforms[@]}" | LC_ALL=C sort))
-          requested_platforms="${requested_platforms//'\n'/,}"
-          available_platforms="${available_platforms//'\n'/,}"
+          # If you use the `requested_platforms` env var, then parse it.
+          if [ -n "${requested_platforms}" ]; then
+            # Transform env var into bash array to calculate arrays intersect. That allow us to know the plateform that can work with our image who can be build on current github docker buildx.
+            IFS=',' read -r -a requested_platforms <<< "${requested_platforms}"
+            IFS=',' read -r -a available_platforms <<< "${{ steps.buildx.outputs.platforms }}"
+            # Only got the intersect of two arrays
+            available_platforms=$(comm -12 <(printf '%s\n' "${requested_platforms[@]}" | LC_ALL=C sort) <(printf '%s\n' "${available_platforms[@]}" | LC_ALL=C sort))
+            # Just format the output for the docker commands
+            requested_platforms="${requested_platforms//' '/}"
+            available_platforms="${available_platforms//' '/}"
+          else
+            available_platforms="${{ steps.buildx.outputs.platforms }}"
+          fi
+
           echo "available_platforms=$available_platforms"
-          echo "requested_platforms=${requested_platforms}" >> $GITHUB_ENV
+
+          # Save Available platforms
+          echo "available_platforms=${available_platforms}" >> $GITHUB_ENV
+          echo "docker_image=${image,,}" >> $GITHUB_ENV
 
       # Use cache image for quicker build time.
       - name: Cache Docker layers

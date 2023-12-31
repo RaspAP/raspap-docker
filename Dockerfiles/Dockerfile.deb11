@@ -6,5 +6,6 @@ RUN usermod -aG sudo raspap
 
 RUN apt update
 RUN apt install nano
+RUN apt install iproute2
 
 RUN echo "raspap ALL=(ALL) NOPASSWD:ALL" | EDITOR='tee -a' visudo

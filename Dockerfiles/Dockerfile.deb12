@@ -1,3 +1,10 @@
 FROM jrei/systemd-debian:12
 RUN apt update && apt install -y sudo wget procps curl systemd && rm -rf /var/lib/apt/lists/*
-COPY setup.sh .
+
+RUN useradd -m raspap
+RUN usermod -aG sudo raspap
+
+RUN apt update
+RUN apt install nano
+
+RUN echo "raspap ALL=(ALL) NOPASSWD:ALL" | EDITOR='tee -a' visudo

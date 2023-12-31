@@ -23,7 +23,11 @@ docker exec -it raspap bash
 3. Change user to raspap
 
 ```
-su raspap && cd ~
+su raspap
+```
+
+```
+cd ~ && /bin/bash
 ```
 
 4. Run the script
@@ -57,7 +61,11 @@ docker exec -it raspap bash
 3. Change user to raspap
 
 ```
-su raspap && cd ~
+su raspap
+```
+
+```
+cd ~ && /bin/bash
 ```
 
 4. Run the script

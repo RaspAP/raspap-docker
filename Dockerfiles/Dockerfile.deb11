@@ -1,0 +1,11 @@
+FROM jrei/systemd-debian:11
+RUN apt update && apt install -y sudo wget procps curl systemd && rm -rf /var/lib/apt/lists/*
+
+RUN useradd -m raspap
+RUN usermod -aG sudo raspap
+
+RUN apt update
+RUN apt install nano
+RUN apt install iproute2 -y
+
+RUN echo "raspap ALL=(ALL) NOPASSWD:ALL" | EDITOR='tee -a' visudo

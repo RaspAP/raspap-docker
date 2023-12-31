@@ -1,8 +1,8 @@
-name: Build docker images
+name: Build Docker Images
 
 on:
   push:
-    branches: [ 'master' ]
+    branches: ['master']
   schedule:
     # Cron execution is for weekly dependencies update (for security update)
     #             ┌───────────── minute (0 - 59)
@@ -10,7 +10,7 @@ on:
     #             │ │ ┌───────────── day of the month (1 - 31)
     #             │ │ │ ┌───────────── month (1 - 12 or JAN-DEC)
     #             │ │ │ │ ┌───────────── day of the week (0 - 6 or SUN-SAT)
-    - cron: "0 0 * * 0"
+    - cron: '0 0 * * 0'
 
 jobs:
   build:
@@ -18,24 +18,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code from Git repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
+        uses: docker/setup-qemu-action@v3
+
       - name: Set up Docker Buildx
         id: buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v3
 
       # Only if you want the image to be push to docker.io instead of the GitHub Package repository
-#       - name: Docker login to DockerHub
-#         uses: docker/login-action@v1
-#         with:
-#           username: ${{ secrets.DOCKER_USERNAME }}
-#           password: ${{ secrets.DOCKER_PASSWORD }}
+      #       - name: Docker login to DockerHub
+      #         uses: docker/login-action@v1
+      #         with:
+      #           username: ${{ secrets.DOCKER_USERNAME }}
+      #           password: ${{ secrets.DOCKER_PASSWORD }}
 
       # Comment this if you prefer to use the docker.io image repository | This method can be better because it didn't need any password (use the credentials of the people who commit)
       - name: Docker login to GitHub
-        uses: docker/login-action@v1 
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -43,8 +44,7 @@ jobs:
 
       - name: Prepare available platforms build
         env: # Here you need to test on what platform your docker image can be build. Important one is linux/arm/v7, linux/arm64 and linux/amd64
-          requested_platforms: "linux/amd64,linux/arm64,linux/arm/v7" # jrei/systemd-debian:10 support only i386, amd64, arm and arm64
-          image: "ghcr.io/${{ github.repository }}:latest"
+          requested_platforms: 'linux/amd64,linux/arm64,linux/arm/v7'
         run: |
           # If you use the `requested_platforms` env var, then parse it.
           if [ -n "${requested_platforms}" ]; then
@@ -54,39 +54,50 @@ jobs:
             # Only got the intersect of two arrays
             available_platforms=$(comm -12 <(printf '%s\n' "${requested_platforms[@]}" | LC_ALL=C sort) <(printf '%s\n' "${available_platforms[@]}" | LC_ALL=C sort))
             # Just format the output for the docker commands
-            requested_platforms="${requested_platforms//'
-          '/,}"
-            available_platforms="${available_platforms//'
-          '/,}"
+            requested_platforms="${requested_platforms//' '/}"
+            available_platforms="${available_platforms//' '/}"
           else
             available_platforms="${{ steps.buildx.outputs.platforms }}"
           fi
 
           echo "available_platforms=$available_platforms"
-          
+
           # Save Available platforms
           echo "available_platforms=${available_platforms}" >> $GITHUB_ENV
           echo "docker_image=${image,,}" >> $GITHUB_ENV
 
       # Use cache image for quicker build time.
       - name: Cache Docker layers
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-buildx-
 
-      # Use official buildx GitHub Action
-      - name: Docker build & push
-        uses: docker/build-push-action@v2
+      # Build & push Docker images
+      - name: Docker build & push - Dockerfile.deb11
+        uses: docker/build-push-action@v5
         with:
           context: .
           push: true
+          dockerfile: Dockerfiles/Dockerfile.deb11
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
-          platforms:  ${{ env.available_platforms }}
-          tags: ${{ env.docker_image }}
+          platforms: ${{ env.available_platforms }}
+          tags: ghcr.io/${{ github.repository }}:bullseye
+
+      # Use official buildx GitHub Action
+      - name: Docker build & push - Dockerfile.deb12
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          dockerfile: Dockerfiles/Dockerfile.deb12
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new
+          platforms: ${{ env.available_platforms }}
+          tags: ghcr.io/${{ github.repository }}:bookworm
 
       # Save new cache
       - name: Move cache

@@ -20,16 +20,16 @@ docker run --name raspap -it -d --privileged --network=host -v /sys/fs/cgroup:/s
 docker exec -it raspap bash
 ```
 
-3. Run the setup script
+3. Change user to raspap
 
 ```
-./setup.sh
+su raspap && cd ~
 ```
 
-4. Restart the container
+4. Run the script
 
 ```
-docker restart raspap
+curl -sL https://install.raspap.com | bash
 ```
 
 5. Web GUI should be accessible on [http://localhost](http://localhost) by default
@@ -48,16 +48,16 @@ docker run --name raspap -it -d --privileged --network=host -v /sys/fs/cgroup:/s
 docker exec -it raspap bash
 ```
 
-3. Run the setup script
+3. Change user to raspap
 
 ```
-./setup.sh
+su raspap && cd ~
 ```
 
-4. Restart the container
+4. Run the script
 
 ```
-docker restart raspap
+curl -sL https://install.raspap.com | bash
 ```
 
 5. Web GUI should be accessible on [http://localhost](http://localhost) by default

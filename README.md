@@ -8,10 +8,10 @@ A community-led docker container for RaspAP
 
 ### Debian 12
 
-1. Start the container with `jrcichra/raspap-docker:bookworm` image
+1. Start the container with `ghcr.io/raspap/raspap-docker:bookworm` image
 
 ```
-docker run --name raspap -it -d --privileged --network=host -v /sys/fs/cgroup:/sys/fs/cgroup:rw --cap-add SYS_ADMIN jrcichra/raspap-docker:bookworm
+docker run --name raspap -it -d --privileged --network=host -v /sys/fs/cgroup:/sys/fs/cgroup:rw --cap-add SYS_ADMIN ghcr.io/raspap/raspap-docker:bookworm
 ```
 
 2. Enter the container
@@ -32,14 +32,20 @@ su raspap && cd ~
 curl -sL https://install.raspap.com | bash
 ```
 
-5. Web GUI should be accessible on [http://localhost](http://localhost) by default
+5. Restart the container after installation
+
+```
+docker restart raspap
+```
+
+6. Web GUI should be accessible on [http://localhost](http://localhost) by default
 
 ### Debian 11
 
-1. Start the container with `jrcichra/raspap-docker:bullseye` image
+1. Start the container with `ghcr.io/raspap/raspap-docker:bullseye` image
 
 ```
-docker run --name raspap -it -d --privileged --network=host -v /sys/fs/cgroup:/sys/fs/cgroup:rw --cap-add SYS_ADMIN jrcichra/raspap-docker:bullseye
+docker run --name raspap -it -d --privileged --network=host -v /sys/fs/cgroup:/sys/fs/cgroup:rw --cap-add SYS_ADMIN ghcr.io/raspap/raspap-docker:bullseye
 ```
 
 2. Enter the container
@@ -60,4 +66,10 @@ su raspap && cd ~
 curl -sL https://install.raspap.com | bash
 ```
 
-5. Web GUI should be accessible on [http://localhost](http://localhost) by default
+5. Restart the container after installation
+
+```
+docker restart raspap
+```
+
+6. Web GUI should be accessible on [http://localhost](http://localhost) by default

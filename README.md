@@ -12,3 +12,12 @@ $ ./setup.sh
 docker restart raspap
 Web GUI should be accessible on http://localhost by default
 ```
+## Workaround for arm devices
+To use this container on arm devices you have to make cgroups writable:
+```
+docker run --name raspap -it -d --privileged --network=host --cgroupns host -v /sys/fs/cgroup:/sys/fs/cgroup:rw --cap-add SYS_ADMIN jrcichra/raspap-docker
+docker exec -it raspap bash
+$ ./setup.sh
+docker restart raspap
+Web GUI should be accessible on http://localhost by default
+```

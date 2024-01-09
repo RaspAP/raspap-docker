@@ -6,15 +6,17 @@ A community-led docker container for RaspAP
 
 # Usage
 ```
-docker run --name raspap -it -d --privileged --network=host -v /sys/fs/cgroup:/sys/fs/cgroup:ro --cap-add SYS_ADMIN jrcichra/raspap-docker
+docker run --name raspap -it -d --privileged --network=host -v /sys/fs/cgroup:/sys/fs/cgroup:ro --cap-add SYS_ADMIN ghcr.io/raspap/raspap-docker:latest
+```
 Web GUI should be accessible on http://localhost by default
+
+## Workaround for ARM devices
+To use this container on ARM devices you have to make cgroups writable:
 ```
-## Workaround for arm devices
-To use this container on arm devices you have to make cgroups writable:
+docker run --name raspap -it -d --privileged --network=host --cgroupns=host -v /sys/fs/cgroup:/sys/fs/cgroup:rw --cap-add SYS_ADMIN ghcr.io/raspap/raspap-docker:latest
 ```
-docker run --name raspap -it -d --privileged --network=host --cgroupns=host -v /sys/fs/cgroup:/sys/fs/cgroup:rw --cap-add SYS_ADMIN jrcichra/raspap-docker
 Web GUI should be accessible on http://localhost by default
-```
+
 ## Allow WiFi-clients to connect to LAN and internet
 Because of docker isolation and security defaults the following rules must be added on the docker host:
 ```

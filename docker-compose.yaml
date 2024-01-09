@@ -1,0 +1,14 @@
+version: "3.3"
+services:
+  raspap:
+    container_name: raspap
+    image: ghcr.io/raspap/raspap-docker:latest
+    #build: .
+    privileged: true
+    network_mode: host
+    pid: host
+    cap_add:
+      - SYS_ADMIN
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    restart: unless-stopped

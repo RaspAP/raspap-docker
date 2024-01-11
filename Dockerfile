@@ -4,4 +4,3 @@ RUN curl -sL https://install.raspap.com | bash -s -- --yes --wireguard 1 --openv
 COPY firewall-rules.sh /home/firewall-rules.sh
 RUN chmod +x /home/firewall-rules.sh
 CMD [ "/bin/bash", "-c", "/home/firewall-rules.sh && /lib/systemd/systemd" ]
-

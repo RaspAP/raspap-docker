@@ -1,4 +1,4 @@
-![raspap-docker-repository](https://github.com/RaspAP/raspap-docker/assets/229399/01112463-dd18-4c62-bc37-815bc0046cd8)
+![raspap-docker-repository](https://github.com/RaspAP/raspap-docker/assets/229399/c055fa68-ec85-4eb8-9bd2-4f793744bbfc)
 
 # raspap-docker
 A community-led docker container for RaspAP

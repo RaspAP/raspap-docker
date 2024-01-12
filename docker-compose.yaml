@@ -1,4 +1,4 @@
-version: "3.3"
+version: "3.8"
 services:
   raspap:
     container_name: raspap
@@ -6,7 +6,7 @@ services:
     #build: .
     privileged: true
     network_mode: host
-    pid: host
+    #cgroup: host # uncomment when using an ARM device 
     cap_add:
       - SYS_ADMIN
     volumes:

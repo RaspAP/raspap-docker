@@ -26,8 +26,9 @@ iptables -C FORWARD -i wlan0 -o eth0 -j ACCEPT || iptables -A FORWARD -i wlan0 -
 iptables-save
 ```
 ## Deploying using docker-compose
-use the docker-compose.yaml file to deploy raspap using docker compose.
-**Do not use 'docker-compose' but use 'docker compose'**
+Use the `docker-compose.yaml` file to deploy RaspAP using docker compose.
+**Do not use 'docker-compose' but rather 'docker compose'**:
+
 ```bash
 git clone https://github.com/RaspAP/raspap-docker.git
 cd raspap-docker

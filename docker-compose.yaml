@@ -1,0 +1,14 @@
+version: "3.8"
+services:
+  raspap:
+    container_name: raspap
+    image: ghcr.io/raspap/raspap-docker:latest
+    #build: .
+    privileged: true
+    network_mode: host
+    #cgroup: host # uncomment when using an ARM device 
+    cap_add:
+      - SYS_ADMIN
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    restart: unless-stopped

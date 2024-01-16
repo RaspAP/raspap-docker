@@ -25,3 +25,11 @@ iptables -C FORWARD -i eth0 -o wlan0 -m state --state RELATED,ESTABLISHED -j ACC
 iptables -C FORWARD -i wlan0 -o eth0 -j ACCEPT || iptables -A FORWARD -i wlan0 -o eth0 -j ACCEPT
 iptables-save
 ```
+## Deploying using docker-compose
+Use the `docker-compose.yaml` file to deploy RaspAP using docker compose.
+**Do not use `docker-compose` but rather `docker compose`**. For ARM devices, be sure to uncomment the `cgroup: host` line before executing `docker compose`:
+```bash
+git clone https://github.com/RaspAP/raspap-docker.git
+cd raspap-docker
+docker compose up -d
+```

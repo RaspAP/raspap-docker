@@ -1,3 +1,5 @@
+# Some parts of code originated from https://github.com/j8r/dockerfiles/
+
 FROM debian:bookworm
 
 ENV container docker

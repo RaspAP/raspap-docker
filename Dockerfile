@@ -28,5 +28,6 @@ VOLUME [ "/sys/fs/cgroup" ]
 
 RUN curl -sL https://install.raspap.com | bash -s -- --yes --wireguard 1 --openvpn 1 --adblock 1
 COPY firewall-rules.sh /home/firewall-rules.sh
+COPY wpa_supplicant.conf /etc/wpa_supplicant/
 RUN chmod +x /home/firewall-rules.sh
 CMD [ "/bin/bash", "-c", "/home/firewall-rules.sh && /lib/systemd/systemd" ]

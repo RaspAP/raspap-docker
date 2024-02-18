@@ -30,4 +30,8 @@ RUN curl -sL https://install.raspap.com | bash -s -- --yes --wireguard 1 --openv
 COPY firewall-rules.sh /home/firewall-rules.sh
 COPY wpa_supplicant.conf /etc/wpa_supplicant/
 RUN chmod +x /home/firewall-rules.sh
-CMD [ "/bin/bash", "-c", "/home/firewall-rules.sh && /lib/systemd/systemd" ]
+COPY env-setup.sh /home/env-setup.sh
+RUN chmod +x /home/env-setup.sh
+COPY password-generator.php /home/password-generator.php
+
+CMD [ "/bin/bash", "-c", "/home/env-setup.sh && /home/firewall-rules.sh && /lib/systemd/systemd" ]

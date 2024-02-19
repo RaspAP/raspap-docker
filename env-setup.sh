@@ -2,6 +2,7 @@
 declare -A aliases=(
     [RASPAP_SSID]=RASPAP_hostapd_ssid
     [RASPAP_SSID_PASS]=RASPAP_hostapd_wpa_passphrase
+    [RASPAP_COUNTRY]=RASPAP_hostapd_country_code
 )
 
 # Files that follow a predictable key=value format

@@ -12,7 +12,7 @@ services:
       - RASPAP_SSID_PASS=ChangeMe
       - RASPAP_COUNTRY=GB
       - RASPAP_WEBGUI_USER=admin
-      - RASPAP_WEBGUI_PASSWORD=secret
+      - RASPAP_WEBGUI_PASS=secret
       - RASPAP_WEBGUI_PORT=80
     cap_add:
       - SYS_ADMIN

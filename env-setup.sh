@@ -65,7 +65,7 @@ function update_webgui_port() {
         # Only update if env var is set
         return
     fi
-    old="server.port                 = 80$"
+    old="server.port                 = [0-9]*"
     new="server.port                 = ${port}"
     sudo sed -i "s/$old/$new/g" ${lighttpd_conf}
 }

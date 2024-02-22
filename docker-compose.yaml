@@ -7,6 +7,13 @@ services:
     privileged: true
     network_mode: host
     #cgroup: host # uncomment when using an ARM device 
+    environment:
+      - RASPAP_SSID=raspap-webgui
+      - RASPAP_SSID_PASS=ChangeMe
+      - RASPAP_COUNTRY=GB
+      - RASPAP_WEBGUI_USER=admin
+      - RASPAP_WEBGUI_PASS=secret
+      - RASPAP_WEBGUI_PORT=80
     cap_add:
       - SYS_ADMIN
     volumes:

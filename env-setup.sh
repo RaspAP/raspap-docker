@@ -15,6 +15,8 @@ declare -A conf_files=(
 raspap_auth=/etc/raspap/raspap.auth
 lighttpd_conf=/etc/lighttpd/lighttpd.conf
 
+password_generator=/home/password-generator.php
+
 function main() {
     alias_env_vars
     update_webgui_auth $RASPAP_WEBGUI_USER $RASPAP_WEBGUI_PASS
@@ -38,15 +40,27 @@ function alias_env_vars() {
 function update_webgui_auth() {
     declare user=$1
     declare pass=$2
+
+    if ! [ -f $raspap_auth ]
+    then
+        # If the raspap.auth file doesn't exist, create it with default values
+        default_user=admin
+        default_pass=$(php ${password_generator} secret)
+
+        echo "$default_user" > "$raspap_auth"
+        echo "$default_pass" >> "$raspap_auth"
+        chown www-data:www-data $raspap_auth # To allow later updating from the webgui
+    fi
+
     if [ -z $user ]
     then
-        # If not set, keep existing value
+        # If no user var is set, keep the existing user value
         user=$(head $raspap_auth -n+1)
     fi
 
     if [ -z "${pass}" ]
     then
-        # If not set, keep existing value
+        # If no password var is set, keep the existing password value
         pass=$(tail $raspap_auth -n+2)
     else
         # Hash password
@@ -60,7 +74,8 @@ function update_webgui_auth() {
 # $1 - Port
 function update_webgui_port() {
     port=$1
-    if [ ! -z "${!port}" ]
+
+    if [ -z "${port}" ]
     then
         # Only update if env var is set
         return

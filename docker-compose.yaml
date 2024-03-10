@@ -4,9 +4,11 @@ services:
     container_name: raspap
     image: ghcr.io/raspap/raspap-docker:latest
     #build: .
+    ports:
+      - "8081:8081"
     privileged: true
     network_mode: host
-    #cgroup: host # uncomment when using an ARM device 
+    #cgroup: host # uncomment when using an ARM device
     environment:
       - RASPAP_SSID=raspap-webgui
       - RASPAP_SSID_PASS=ChangeMe

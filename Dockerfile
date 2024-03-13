@@ -26,7 +26,9 @@ RUN rm -f /lib/systemd/system/multi-user.target.wants/* \
 
 VOLUME [ "/sys/fs/cgroup" ]
 
-RUN curl -sL https://install.raspap.com | bash -s -- --yes --wireguard 1 --openvpn 1 --adblock 1
+EXPOSE 8081
+
+RUN curl -sL https://install.raspap.com | bash -s -- --yes --wireguard 1 --openvpn 1 --adblock 1 --rest 1
 COPY firewall-rules.sh /home/firewall-rules.sh
 COPY wpa_supplicant.conf /etc/wpa_supplicant/
 RUN chmod +x /home/firewall-rules.sh

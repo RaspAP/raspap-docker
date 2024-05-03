@@ -25,4 +25,4 @@ jobs:
 
       - name: Build the image
         run: |
-              docker buildx build --platform=linux/arm64,linux/amd64,linux/arm64,linux/arm/v7 . --tag ghcr.io/RaspAP/raspap-docker:latest --tag ghcr.io/RaspAP/raspap-docker:${{ github.run_number }}
+              docker buildx build --platform=linux/arm64,linux/amd64,linux/arm64,linux/arm/v7 . --tag ghcr.io/raspap/raspap-docker:latest --tag ghcr.io/raspap/raspap-docker:${{ github.run_number }}

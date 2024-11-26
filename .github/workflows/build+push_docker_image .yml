@@ -1,8 +1,10 @@
-name: Build docker images
+name: Build+Push docker images
 
 on:
-  pull_request:
+  push:
     branches: [ 'master' ]
+  schedule:
+    - cron: "0 0 * * 0"
 
 jobs:
   build:
@@ -23,6 +25,8 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build the image
+      - name: Build and push the image
         run: |
-              docker buildx build --platform=linux/arm64,linux/amd64,linux/arm64,linux/arm/v7 . --tag ghcr.io/raspap/raspap-docker:latest --tag ghcr.io/raspap/raspap-docker:${{ github.run_number }}
+              docker buildx build --push \
+              --platform=linux/arm64,linux/amd64,linux/arm64,linux/arm/v7 . \
+              --tag ghcr.io/raspap/raspap-docker:latest --tag ghcr.io/raspap/raspap-docker:${{ github.run_number }}

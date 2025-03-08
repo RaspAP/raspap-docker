@@ -114,8 +114,9 @@ function replace_in_conf() {
     val=$2
     path=$3
 
-    old="$key"=".*"
-    new="$key"="$val"
+    escaped=$(echo "$val" | sed 's/[&/\]/\\&/g')
+    old="$key=.*"
+    new="$key=$escaped"
 
     if [ -z "$(grep "$old" $path)" ]
     then

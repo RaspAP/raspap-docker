@@ -17,7 +17,7 @@ docker run --name raspap -it -d --privileged --network=host --cgroupns=host -v /
 Web GUI should be accessible on http://localhost by default
 
 ## Allow WiFi-clients to connect to LAN and internet
-Because of docker isolation and security defaults the following rules must be added on the docker host:
+Due to docker isolation and security defaults, the following rules must be added on the docker host:
 ```
 iptables -I DOCKER-USER -i src_if -o dst_if -j ACCEPT
 iptables -t nat -C POSTROUTING -o eth0 -j MASQUERADE || iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
@@ -25,6 +25,9 @@ iptables -C FORWARD -i eth0 -o wlan0 -m state --state RELATED,ESTABLISHED -j ACC
 iptables -C FORWARD -i wlan0 -o eth0 -j ACCEPT || iptables -A FORWARD -i wlan0 -o eth0 -j ACCEPT
 iptables-save
 ```
+
+**Important:** if the interface names on your device are something other than `wlan0` and `eth0`, be sure to substitute them in the rules above.
+
 ## Deploying using docker-compose
 Use the `docker-compose.yaml` file to deploy RaspAP using docker compose.
 **Do not use `docker-compose` but rather `docker compose`**. For ARM devices, be sure to uncomment the `cgroup: host` line before executing `docker compose`:

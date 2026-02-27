@@ -114,16 +114,18 @@ function replace_in_conf() {
     val=$2
     path=$3
 
-    old="$key"=".*"
-    new="$key"="$val"
+    # Escape special characters in the replacement string
+    escaped=$(echo "$val" | sed 's/[&/\]/\\&/g')
 
-    if [ -z "$(grep "$old" $path)" ]
-    then
+    old="$key=.*"
+    new="$key=$escaped"
+
+    if ! grep -q "^$key=" "$path"; then
         # Add value
-        echo $new >> $path
+        echo "$new" >> "$path"
     else
-        # Value exists in conf
-        sudo sed -i "s/$old/$new/g" $path
+        # Replace existing value safely
+        sudo sed -i "s|^$old|$new|" "$path"
     fi
 }
 
